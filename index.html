@@ -666,8 +666,8 @@
         // ================= PAGE 1 CHECK =================
         function checkPage1() {
             const getVal = (id) => {
-                const raw = document.getElementById(id).value.trim();
-                return raw.toUpperCase();
+                const selectEl = document.getElementById(id);
+                return selectEl ? selectEl.value.trim().toUpperCase() : '';
             };
 
             const ans = {
@@ -682,25 +682,29 @@
 
             for (let k in correct) {
                 const selectEl = document.getElementById(`p1-${k}`);
-                if (ans[k] === correct[k]) {
-                    selectEl.classList.add('correct-bg');
-                    selectEl.classList.remove('incorrect-bg');
-                    score++;
-                } else {
-                    selectEl.classList.add('incorrect-bg');
-                    selectEl.classList.remove('correct-bg');
+                if (selectEl) {
+                    if (ans[k] === correct[k]) {
+                        selectEl.classList.add('correct-bg');
+                        selectEl.classList.remove('incorrect-bg');
+                        score++;
+                    } else {
+                        selectEl.classList.add('incorrect-bg');
+                        selectEl.classList.remove('correct-bg');
+                    }
                 }
             }
 
             const fb = document.getElementById('p1-feedback');
-            fb.classList.remove('hidden');
-            if (score === 4) {
-                fb.className = "font-bold text-sm text-emerald-700";
-                fb.innerText = "Great job! All answers are correct.";
-                unlockNextPage(1);
-            } else {
-                fb.className = "font-bold text-sm text-rose-700";
-                fb.innerText = `${score}/4 correct. Try again!`;
+            if (fb) {
+                fb.classList.remove('hidden');
+                if (score === 4) {
+                    fb.className = "font-bold text-sm text-emerald-700";
+                    fb.innerText = "Great job! All answers are correct.";
+                    unlockNextPage(1);
+                } else {
+                    fb.className = "font-bold text-sm text-rose-700";
+                    fb.innerText = `${score}/4 correct. Try again!`;
+                }
             }
         }
 
