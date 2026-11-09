@@ -837,53 +837,62 @@
 
         // ================= PAGE 4 CHECK =================
         function checkPage4() {
-            const expected = [
-                { n: "Antoni Bakula", j: "a manager", f: "Lublin, Poland", w: "a language school" },
-                { n: "Bily Davies", j: "an English teacher", f: "Chicago in the US", w: "a university" },
-                { n: "Josefina Flores", j: "a student", f: "Acapulco in Mexico", w: "a school" }
-            ];
-
             let score = 0;
-            for (let i = 1; i <= 3; i++) {
-                const nInput = document.getElementById(`p4-n${i}`);
-                const jInput = document.getElementById(`p4-j${i}`);
-                const fInput = document.getElementById(`p4-f${i}`);
-                const wInput = document.getElementById(`p4-w${i}`);
+            
+            // Check Row 1 (Antoni Bakula)
+            const n1 = normalizeStr(document.getElementById('p4-n1').value);
+            const j1 = normalizeStr(document.getElementById('p4-j1').value);
+            const f1 = normalizeStr(document.getElementById('p4-f1').value);
+            const w1 = normalizeStr(document.getElementById('p4-w1').value);
 
-                const nVal = normalizeStr(nInput.value);
-                const jVal = normalizeStr(jInput.value);
-                const fVal = normalizeStr(fInput.value);
-                const wVal = normalizeStr(wInput.value);
+            // Name check - enforces Capital Letters for first & last name
+            const n1Valid = /^[A-Z][a-z]+\s+[A-Z][a-z]+$/.test(n1) && n1.toLowerCase() === "antoni bakula";
+            const j1Valid = j1.toLowerCase().includes("manager");
+            const f1Valid = /lublin/i.test(f1) && /poland/i.test(f1);
+            const w1Valid = w1.toLowerCase().includes("language school") || w1.toLowerCase().includes("school");
 
-                const exp = expected[i-1];
-                let rowCorrect = true;
-                
-                if (nVal.toLowerCase() === exp.n.toLowerCase()) {
-                    nInput.classList.add('correct-bg'); nInput.classList.remove('incorrect-bg');
-                } else {
-                    nInput.classList.add('incorrect-bg'); nInput.classList.remove('correct-bg'); rowCorrect = false;
-                }
+            setFieldState('p4-n1', n1Valid);
+            setFieldState('p4-j1', j1Valid);
+            setFieldState('p4-f1', f1Valid);
+            setFieldState('p4-w1', w1Valid);
 
-                if (jVal.toLowerCase().includes(exp.j.toLowerCase())) {
-                    jInput.classList.add('correct-bg'); jInput.classList.remove('incorrect-bg');
-                } else {
-                    jInput.classList.add('incorrect-bg'); jInput.classList.remove('correct-bg'); rowCorrect = false;
-                }
+            if (n1Valid && j1Valid && f1Valid && w1Valid) score++;
 
-                if (fVal.toLowerCase().includes(exp.f.toLowerCase().replace("in the ", "").replace(" in ", ""))) {
-                    fInput.classList.add('correct-bg'); fInput.classList.remove('incorrect-bg');
-                } else {
-                    fInput.classList.add('incorrect-bg'); fInput.classList.remove('correct-bg'); rowCorrect = false;
-                }
+            // Check Row 2 (Bily Davies)
+            const n2 = normalizeStr(document.getElementById('p4-n2').value);
+            const j2 = normalizeStr(document.getElementById('p4-j2').value);
+            const f2 = normalizeStr(document.getElementById('p4-f2').value);
+            const w2 = normalizeStr(document.getElementById('p4-w2').value);
 
-                if (wVal.toLowerCase().includes(exp.w.toLowerCase())) {
-                    wInput.classList.add('correct-bg'); wInput.classList.remove('incorrect-bg');
-                } else {
-                    wInput.classList.add('incorrect-bg'); wInput.classList.remove('correct-bg'); rowCorrect = false;
-                }
+            const n2Valid = /^[A-Z][a-z]+\s+[A-Z][a-z]+$/.test(n2) && n2.toLowerCase() === "bily davies";
+            const j2Valid = j2.toLowerCase().includes("english teacher") || j2.toLowerCase().includes("teacher");
+            const f2Valid = /chicago/i.test(f2) && /(us|usa|the us|the usa)/i.test(f2);
+            const w2Valid = w2.toLowerCase().includes("university");
 
-                if (rowCorrect) score++;
-            }
+            setFieldState('p4-n2', n2Valid);
+            setFieldState('p4-j2', j2Valid);
+            setFieldState('p4-f2', f2Valid);
+            setFieldState('p4-w2', w2Valid);
+
+            if (n2Valid && j2Valid && f2Valid && w2Valid) score++;
+
+            // Check Row 3 (Josefina Flores)
+            const n3 = normalizeStr(document.getElementById('p4-n3').value);
+            const j3 = normalizeStr(document.getElementById('p4-j3').value);
+            const f3 = normalizeStr(document.getElementById('p4-f3').value);
+            const w3 = normalizeStr(document.getElementById('p4-w3').value);
+
+            const n3Valid = /^[A-Z][a-z]+\s+[A-Z][a-z]+$/.test(n3) && n3.toLowerCase() === "josefina flores";
+            const j3Valid = j3.toLowerCase().includes("student");
+            const f3Valid = /acapulco/i.test(f3) && /mexico/i.test(f3);
+            const w3Valid = w3.toLowerCase().includes("school");
+
+            setFieldState('p4-n3', n3Valid);
+            setFieldState('p4-j3', j3Valid);
+            setFieldState('p4-f3', f3Valid);
+            setFieldState('p4-w3', w3Valid);
+
+            if (n3Valid && j3Valid && f3Valid && w3Valid) score++;
 
             const fb = document.getElementById('p4-feedback');
             fb.classList.remove('hidden');
@@ -893,65 +902,20 @@
                 unlockNextPage(4);
             } else {
                 fb.className = "font-bold text-sm text-rose-700";
-                fb.innerText = `${score}/3 rows correct. Check messages and capital letters.`;
+                fb.innerText = `${score}/3 rows complete. Make sure names start with CAPITAL letters!`;
+            }
+        }
+
+        function setFieldState(id, isCorrect) {
+            const input = document.getElementById(id);
+            if (isCorrect) {
+                input.classList.add('correct-bg');
+                input.classList.remove('incorrect-bg');
+            } else {
+                input.classList.add('incorrect-bg');
+                input.classList.remove('correct-bg');
             }
         }
 
         // ================= PAGE 5 CHECK =================
-        function checkPage5() {
-            const q1Input = document.getElementById('p5-q1');
-            const q2Input = document.getElementById('p5-q2');
-            
-            const v1 = normalizeStr(q1Input.value);
-            const v2 = normalizeStr(q2Input.value);
-
-            const isQ1Correct = /^olena\s+kovalenko\s+is\s+a\s+student\s+from\s+kyiv,?\s+ukraine\.?$/i.test(v1);
-            const isQ2Correct = /^mark\s+evans\s+is\s+a\s+teacher\s+from\s+london,?\s+(the\s+uk|uk)\.?$/i.test(v2);
-
-            let score = 0;
-            if (isQ1Correct) {
-                q1Input.classList.add('correct-bg'); q1Input.classList.remove('incorrect-bg'); score++;
-            } else {
-                q1Input.classList.add('incorrect-bg'); q1Input.classList.remove('correct-bg');
-            }
-
-            if (isQ2Correct) {
-                q2Input.classList.add('correct-bg'); q2Input.classList.remove('incorrect-bg'); score++;
-            } else {
-                q2Input.classList.add('incorrect-bg'); q2Input.classList.remove('correct-bg');
-            }
-
-            const fb = document.getElementById('p5-feedback');
-            fb.classList.remove('hidden');
-            if (score === 2) {
-                fb.className = "font-bold text-sm text-emerald-700";
-                fb.innerText = "Brilliant! Excellent revision work.";
-            } else {
-                fb.className = "font-bold text-sm text-rose-700";
-                fb.innerText = `${score}/2 correct. Mind your capital letters, articles (a/the), and punctuation!`;
-            }
-        }
-
-        // ================= SELF ASSESSMENT =================
-        function setSelfRating(rating) {
-            for (let i = 1; i <= 5; i++) {
-                const star = document.getElementById(`star-${i}`);
-                if (i <= rating) {
-                    star.className = "text-3xl text-amber-400 transition transform hover:scale-110 cursor-pointer";
-                } else {
-                    star.className = "text-3xl text-slate-300 transition transform hover:scale-110 cursor-pointer";
-                }
-            }
-            const msg = document.getElementById('rating-msg');
-            const messages = [
-                "1 - Needs more practice with capital letters.",
-                "2 - Getting there, keep reviewing the rules!",
-                "3 - Good job! You understand the basics.",
-                "4 - Very confident! Great attention to detail.",
-                "5 - Excellent! Perfect mastery of capital letters!"
-            ];
-            msg.innerText = messages[rating - 1];
-        }
-    </script>
-</body>
-</html>
+<!-- ... existing code -->
