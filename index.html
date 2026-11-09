@@ -210,7 +210,7 @@
                 <span class="text-sm text-slate-500">Focus Box & Grammar Rules</span>
             </div>
 
-            <!-- Task Header & Help (Placed above content) -->
+            <!-- Task Header & Help -->
             <div class="mb-6">
                 <div class="flex items-start gap-3">
                     <span class="bg-rose-600 text-white font-bold rounded-lg w-7 h-7 flex items-center justify-center shrink-0 mt-0.5">2</span>
@@ -299,7 +299,7 @@
                 <span class="text-sm text-slate-500">Student Conference Profiles</span>
             </div>
 
-            <!-- Task 3b Header & Help (Placed above content) -->
+            <!-- Task 3 Header & Help -->
             <div class="mb-6">
                 <div class="flex items-start gap-3">
                     <span class="bg-rose-600 text-white font-bold rounded-lg w-7 h-7 flex items-center justify-center shrink-0 mt-0.5">3</span>
@@ -440,7 +440,7 @@
                 <span class="text-sm text-slate-500">Messages & Table Completion</span>
             </div>
 
-            <!-- Task Header & Help (Placed above content) -->
+            <!-- Task Header & Help -->
             <div class="mb-6">
                 <div class="flex items-start gap-3">
                     <span class="bg-rose-600 text-white font-bold rounded-lg w-7 h-7 flex items-center justify-center shrink-0 mt-0.5">4</span>
@@ -609,7 +609,7 @@
 
     <!-- Interactive Logic Script -->
     <script>
-        let maxUnlockedPage = 1; // Locked navigation by default: starts at Page 1
+        let maxUnlockedPage = 1;
 
         function toggleHelp(id) {
             const el = document.getElementById(id);
@@ -618,14 +618,12 @@
             }
         }
 
-        // Navigation control enforcing strict page unlocking
         function goToPage(page) {
             if (page > maxUnlockedPage) return;
 
             document.querySelectorAll('.page-step').forEach(el => el.classList.remove('active'));
             document.getElementById(`page-${page}`).classList.add('active');
 
-            // Update header navigation buttons style
             for (let i = 1; i <= 5; i++) {
                 const btn = document.getElementById(`nav-btn-${i}`);
                 if (!btn) continue;
@@ -643,7 +641,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Unlock next page navigation upon successfully completing exercises
         function unlockNextPage(page) {
             if (page >= maxUnlockedPage) {
                 maxUnlockedPage = page + 1;
@@ -654,7 +651,6 @@
                 prevNextBtn.classList.add('flex');
                 prevNextBtn.disabled = false;
             }
-            // Update nav button header state
             const targetNavBtn = document.getElementById(`nav-btn-${page + 1}`);
             if (targetNavBtn) {
                 targetNavBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'text-rose-300');
@@ -663,11 +659,15 @@
             }
         }
 
+        function normalizeStr(str) {
+            return str.trim().replace(/\s+/g, ' ');
+        }
+
         // ================= PAGE 1 CHECK =================
         function checkPage1() {
             const getVal = (id) => {
                 const raw = document.getElementById(id).value.trim();
-                return raw.toUpperCase(); // Handles cases if letters/options vary
+                return raw.toUpperCase();
             };
 
             const ans = {
@@ -705,10 +705,6 @@
         }
 
         // ================= PAGE 2 CHECK =================
-        function normalizeStr(str) {
-            return str.trim().replace(/\s+/g, ' ');
-        }
-
         function checkPage2() {
             const expected = [
                 "John Smith is from Liverpool in the UK.",
@@ -721,7 +717,6 @@
             for (let i = 1; i <= 4; i++) {
                 const input = document.getElementById(`p2-q${i}`);
                 const val = normalizeStr(input.value);
-                // Allow alternate spelling for Poznan (Poznań)
                 let isMatch = (val === expected[i-1]);
                 if (i === 4 && val === "Natalia Mazur is from Poznań, Poland.") {
                     isMatch = true;
@@ -764,7 +759,6 @@
             const fb = document.getElementById(`p3-fb-${qNum}`);
             const val = normalizeStr(input.value);
             
-            // Clean up previous classes before checking afresh
             input.classList.remove('correct-bg', 'incorrect-bg');
             fb.classList.remove('hidden');
 
@@ -779,7 +773,6 @@
                     }
                 }
             } else if (qNum === 2) {
-                // Accepts: He is / He's from Argentina / Buenos Aires / Buenos Aires in Argentina
                 if (/^(he's|he is)\s+from\s+(buenos\s+aires|argentina|buenos\s+aires\s+in\s+argentina|buenos\s+aires,?\s+argentina)\.?$/i.test(val)) {
                     isCorrect = true;
                 }
@@ -793,12 +786,10 @@
                     customNote = "💡 Марико — це вона! Використовуй 'she' (No, she isn't.)";
                 }
             } else if (qNum === 4) {
-                // Accepts: She is / She's from Warsaw / Poland / Warsaw in Poland
                 if (/^(she's|she is)\s+from\s+(warsaw|poland|warsaw\s+in\s+poland|warsaw,?\s+poland)\.?$/i.test(val)) {
                     isCorrect = true;
                 }
             } else if (qNum === 5) {
-                // Accepts: He is / He's from Hanoi / Vietnam / Hanoi in Vietnam
                 if (/^(he's|he is)\s+from\s+(hanoi|vietnam|hanoi\s+in\s+vietnam|hanoi,?\s+vietnam)\.?$/i.test(val)) {
                     isCorrect = true;
                 }
@@ -843,4 +834,124 @@
                 fb.innerText = "Please fix incorrect answers before proceeding.";
             }
         }
-<!-- ... existing code -->
+
+        // ================= PAGE 4 CHECK =================
+        function checkPage4() {
+            const expected = [
+                { n: "Antoni Bakula", j: "a manager", f: "Lublin, Poland", w: "a language school" },
+                { n: "Bily Davies", j: "an English teacher", f: "Chicago in the US", w: "a university" },
+                { n: "Josefina Flores", j: "a student", f: "Acapulco in Mexico", w: "a school" }
+            ];
+
+            let score = 0;
+            for (let i = 1; i <= 3; i++) {
+                const nInput = document.getElementById(`p4-n${i}`);
+                const jInput = document.getElementById(`p4-j${i}`);
+                const fInput = document.getElementById(`p4-f${i}`);
+                const wInput = document.getElementById(`p4-w${i}`);
+
+                const nVal = normalizeStr(nInput.value);
+                const jVal = normalizeStr(jInput.value);
+                const fVal = normalizeStr(fInput.value);
+                const wVal = normalizeStr(wInput.value);
+
+                const exp = expected[i-1];
+                let rowCorrect = true;
+                
+                if (nVal.toLowerCase() === exp.n.toLowerCase()) {
+                    nInput.classList.add('correct-bg'); nInput.classList.remove('incorrect-bg');
+                } else {
+                    nInput.classList.add('incorrect-bg'); nInput.classList.remove('correct-bg'); rowCorrect = false;
+                }
+
+                if (jVal.toLowerCase().includes(exp.j.toLowerCase())) {
+                    jInput.classList.add('correct-bg'); jInput.classList.remove('incorrect-bg');
+                } else {
+                    jInput.classList.add('incorrect-bg'); jInput.classList.remove('correct-bg'); rowCorrect = false;
+                }
+
+                if (fVal.toLowerCase().includes(exp.f.toLowerCase().replace("in the ", "").replace(" in ", ""))) {
+                    fInput.classList.add('correct-bg'); fInput.classList.remove('incorrect-bg');
+                } else {
+                    fInput.classList.add('incorrect-bg'); fInput.classList.remove('correct-bg'); rowCorrect = false;
+                }
+
+                if (wVal.toLowerCase().includes(exp.w.toLowerCase())) {
+                    wInput.classList.add('correct-bg'); wInput.classList.remove('incorrect-bg');
+                } else {
+                    wInput.classList.add('incorrect-bg'); wInput.classList.remove('correct-bg'); rowCorrect = false;
+                }
+
+                if (rowCorrect) score++;
+            }
+
+            const fb = document.getElementById('p4-feedback');
+            fb.classList.remove('hidden');
+            if (score === 3) {
+                fb.className = "font-bold text-sm text-emerald-700";
+                fb.innerText = "Fantastic! The table is complete and correct.";
+                unlockNextPage(4);
+            } else {
+                fb.className = "font-bold text-sm text-rose-700";
+                fb.innerText = `${score}/3 rows correct. Check messages and capital letters.`;
+            }
+        }
+
+        // ================= PAGE 5 CHECK =================
+        function checkPage5() {
+            const q1Input = document.getElementById('p5-q1');
+            const q2Input = document.getElementById('p5-q2');
+            
+            const v1 = normalizeStr(q1Input.value);
+            const v2 = normalizeStr(q2Input.value);
+
+            const isQ1Correct = /^olena\s+kovalenko\s+is\s+a\s+student\s+from\s+kyiv,?\s+ukraine\.?$/i.test(v1);
+            const isQ2Correct = /^mark\s+evans\s+is\s+a\s+teacher\s+from\s+london,?\s+(the\s+uk|uk)\.?$/i.test(v2);
+
+            let score = 0;
+            if (isQ1Correct) {
+                q1Input.classList.add('correct-bg'); q1Input.classList.remove('incorrect-bg'); score++;
+            } else {
+                q1Input.classList.add('incorrect-bg'); q1Input.classList.remove('correct-bg');
+            }
+
+            if (isQ2Correct) {
+                q2Input.classList.add('correct-bg'); q2Input.classList.remove('incorrect-bg'); score++;
+            } else {
+                q2Input.classList.add('incorrect-bg'); q2Input.classList.remove('correct-bg');
+            }
+
+            const fb = document.getElementById('p5-feedback');
+            fb.classList.remove('hidden');
+            if (score === 2) {
+                fb.className = "font-bold text-sm text-emerald-700";
+                fb.innerText = "Brilliant! Excellent revision work.";
+            } else {
+                fb.className = "font-bold text-sm text-rose-700";
+                fb.innerText = `${score}/2 correct. Mind your capital letters, articles (a/the), and punctuation!`;
+            }
+        }
+
+        // ================= SELF ASSESSMENT =================
+        function setSelfRating(rating) {
+            for (let i = 1; i <= 5; i++) {
+                const star = document.getElementById(`star-${i}`);
+                if (i <= rating) {
+                    star.className = "text-3xl text-amber-400 transition transform hover:scale-110 cursor-pointer";
+                } else {
+                    star.className = "text-3xl text-slate-300 transition transform hover:scale-110 cursor-pointer";
+                }
+            }
+            const msg = document.getElementById('rating-msg');
+            const messages = [
+                "1 - Needs more practice with capital letters.",
+                "2 - Getting there, keep reviewing the rules!",
+                "3 - Good job! You understand the basics.",
+                "4 - Very confident! Great attention to detail.",
+                "5 - Excellent! Perfect mastery of capital letters!"
+            ];
+            msg.innerText = messages[rating - 1];
+        }
+    </script>
+</body>
+</html>
